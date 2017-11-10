@@ -90,7 +90,7 @@ enum {
 	FW_STATUS_ABORT,
 };
 
-static int loading_timeout = 60;	/* In seconds */
+static int loading_timeout = 1;	/* In seconds */
 
 static inline long firmware_loading_timeout(void)
 {
@@ -275,7 +275,8 @@ static const char * const fw_path[] = {
 	"/lib/firmware/updates/" UTS_RELEASE,
 	"/lib/firmware/updates",
 	"/lib/firmware/" UTS_RELEASE,
-	"/lib/firmware"
+	"/lib/firmware",
+	"/vendor/firmware/"
 };
 
 /*
