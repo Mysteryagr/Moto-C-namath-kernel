@@ -3,8 +3,6 @@ dist: trusty
 before_install:
   - git clone https://github.com/ArchiDroid/Toolchain.git -b linaro-4.9 toolchain
   - export CROSS_COMPILE=$PWD/toolchain/bin/arm-eabi-
-  - export KBUILD_BUILD_USER="Mysteryagr"
-  - export KBUILD_BUILD_HOST="TravisCI"
   - sudo apt-get -qq update
   - sudo apt-get install -y build-essential kernel-package libncurses5-dev bzip2
   - chmod +x Build.sh
