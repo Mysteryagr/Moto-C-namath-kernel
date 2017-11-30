@@ -583,7 +583,6 @@ static void cleanup_match(struct xt_entry_match *m, struct net *net)
 	module_put(par.match->me);
 }
 
-<<<<<<< HEAD
 static int
 check_entry(const struct ip6t_entry *e)
 {
@@ -603,8 +602,6 @@ check_entry(const struct ip6t_entry *e)
 	return 0;
 }
 
-=======
->>>>>>> v3.18.37
 static int check_match(struct xt_entry_match *m, struct xt_mtchk_param *par)
 {
 	const struct ip6t_ip6 *ipv6 = par->entryinfo;
@@ -762,15 +759,12 @@ check_entry_size_and_hooks(struct ip6t_entry *e,
 		return -EINVAL;
 	}
 
-<<<<<<< HEAD
 	err = check_entry(e);
-=======
 	if (!ip6_checkentry(&e->ipv6))
 		return -EINVAL;
 
 	err = xt_check_entry_offsets(e, e->elems, e->target_offset,
 				     e->next_offset);
->>>>>>> v3.18.37
 	if (err)
 		return err;
 
@@ -782,13 +776,9 @@ check_entry_size_and_hooks(struct ip6t_entry *e,
 			newinfo->hook_entry[h] = hook_entries[h];
 		if ((unsigned char *)e - base == underflows[h]) {
 			if (!check_underflow(e)) {
-<<<<<<< HEAD
-				pr_debug("Underflows must be unconditional and use the STANDARD target with ACCEPT/DROP\n");
-=======
 				pr_debug("Underflows must be unconditional and "
 					 "use the STANDARD target with "
 					 "ACCEPT/DROP\n");
->>>>>>> v3.18.37
 				return -EINVAL;
 			}
 			newinfo->underflow[h] = underflows[h];
@@ -1509,16 +1499,13 @@ check_compat_entry_size_and_hooks(struct compat_ip6t_entry *e,
 		return -EINVAL;
 	}
 
-<<<<<<< HEAD
 	/* For purposes of check_entry casting the compat entry is fine */
 	ret = check_entry((struct ip6t_entry *)e);
-=======
 	if (!ip6_checkentry(&e->ipv6))
 		return -EINVAL;
 
 	ret = xt_compat_check_entry_offsets(e, e->elems,
 					    e->target_offset, e->next_offset);
->>>>>>> v3.18.37
 	if (ret)
 		return ret;
 
