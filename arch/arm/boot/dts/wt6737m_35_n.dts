@@ -731,9 +731,7 @@
 
 	gpio83_mode2_drvvbus: drvvbus_init {
 		pins_cmd_dat {
-		/*add dtv ---lenovo@lenovo.com--20161111---start****/
-			pins = <PINMUX_GPIO64__FUNC_GPIO64>;
-		/*add dtv ---lenovo@lenovo.com--20161111---end****/
+			pins = <PINMUX_GPIO83__FUNC_GPIO83>;
 			slew-rate = <1>;
 			bias-pull-down = <00>;
 		};
@@ -741,9 +739,7 @@
 
 	gpio83_mode2_drvvbus_low: drvvbus_low {
 		pins_cmd_dat {
-		/*add dtv ---lenovo@lenovo.com--20161111---start****/
-			pins = <PINMUX_GPIO64__FUNC_GPIO64>;
-		/*add dtv ---lenovo@lenovo.com--20161111---end****/
+			pins = <PINMUX_GPIO83__FUNC_GPIO83>;
 			slew-rate = <1>;
 			output-low;
 			bias-pull-down = <00>;
@@ -752,9 +748,7 @@
 
 	gpio83_mode2_drvvbus_high: drvvbus_high {
 		pins_cmd_dat {
-		/*add dtv ---lenovo@lenovo.com--20161111---start****/
-			pins = <PINMUX_GPIO64__FUNC_GPIO64>;
-		/*add dtv ---lenovo@lenovo.com--20161111---end****/
+			pins = <PINMUX_GPIO83__FUNC_GPIO83>;
 			slew-rate = <1>;
 			output-high;
 			bias-pull-down = <00>;
