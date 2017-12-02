@@ -2224,11 +2224,6 @@ static PMU_STATUS mt_battery_CheckChargerVoltage(void)
 #if (V_CHARGER_ENABLE == 1)
 		if (BMT_status.charger_vol <= batt_cust_data.v_charger_min) {
 			battery_log(BAT_LOG_CRTI, "[BATTERY]Charger under voltage!!\r\n");
-			//zhangchao@wind-mobi.com 20161128 begin
-			#ifdef CONFIG_WIND_BATTERY_MODIFY
-			BMT_status.charger_protect_status = charger_UNDER_VOL;
-			#endif
-			//zhangchao@wind-mobi.com 20161128 end
 			BMT_status.bat_charging_state = CHR_ERROR;
 			status = PMU_STATUS_FAIL;
 		}

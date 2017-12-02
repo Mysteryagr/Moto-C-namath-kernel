@@ -89,9 +89,7 @@ unsigned int g_usb_state = USB_UNCONFIGURED;
 static bool usb_unlimited;
 #if defined(CONFIG_MTK_HAFG_20)
 #ifdef HIGH_BATTERY_VOLTAGE_SUPPORT
-//lenovo@lenovo.com 20161206 begin
-BATTERY_VOLTAGE_ENUM g_cv_voltage = BATTERY_VOLT_04_400000_V;
-//lenovo@lenovo.com 20161206 end
+BATTERY_VOLTAGE_ENUM g_cv_voltage = BATTERY_VOLT_04_340000_V;
 #else
 BATTERY_VOLTAGE_ENUM g_cv_voltage = BATTERY_VOLT_04_200000_V;
 #endif
@@ -114,6 +112,10 @@ int g_temp_status = TEMP_POS_10_TO_POS_45;
 kal_bool temp_error_recovery_chr_flag = KAL_TRUE;
 #endif
 
+//Other_platform_modify  baidabin.wt  ADD 20161027  ui_soc sync full in charging
+#ifdef WT_UI_SOC_SYNC_FULL_IN_CHARGING
+kal_bool ui_soc_sync_100_enable = KAL_FALSE;
+#endif
 /* ============================================================ // */
 /* function prototype */
 /* ============================================================ // */
@@ -466,13 +468,7 @@ unsigned int set_bat_charging_current_limit(int current_limit)
 {
 	CHR_CURRENT_ENUM chr_type_ichg = 0;
 	CHR_CURRENT_ENUM chr_type_aicr = 0;
-	
-	//lenovo@lenovo.com 20161116 begin
-	#ifndef CONFIG_WIND_THERMAL_CURRENT
-	return 0; 
-	#endif
-	//lenovo@lenovo.com 20161116 end
-	
+
 	mutex_lock(&g_ichg_access_mutex);
 	if (current_limit != -1) {
 		g_bcct_flag = 1;
@@ -636,6 +632,13 @@ static unsigned int charging_full_check(void)
 {
 	unsigned int status;
 
+//Other_platform_modify  baidabin.wt  ADD 20161027  ui_soc sync full in charging
+#ifdef WT_UI_SOC_SYNC_FULL_IN_CHARGING
+	if(BMT_status.ICharging < WT_UI_SOC_SYNC_FULL_ITERM ) {
+		ui_soc_sync_100_enable = KAL_TRUE;
+		//battery_xlog_printk(BAT_LOG_CRTI, "[BATTERY] charging_full_check  ui_soc_sync_100_enable = KAL_TRUE ! \n");
+	}
+#endif
 	battery_charging_control(CHARGING_CMD_GET_CHARGING_STATUS, &status);
 	if (status == KAL_TRUE) {
 		g_full_check_count++;
@@ -912,9 +915,7 @@ static void mtk_select_cv(void)
 #endif
 
 	if (batt_cust_data.high_battery_voltage_support)
-	//lenovo@lenovo.com 20161206 begin
-		cv_voltage = BATTERY_VOLT_04_400000_V;
-	//lenovo@lenovo.com 20161206 end
+		cv_voltage = BATTERY_VOLT_04_340000_V;
 	else
 		cv_voltage = BATTERY_VOLT_04_200000_V;
 
@@ -1133,11 +1134,6 @@ PMU_STATUS BAT_BatteryHoldAction(void)
 	return PMU_STATUS_OK;
 }
 
-//lenovo@lenovo.com 20161121 begin
-#ifdef CONFIG_WIND_BATTERY_MODIFY 
-extern unsigned int g_batt_temp_status ;
-#endif
-//lenovo@lenovo.com 20161121 end
 
 PMU_STATUS BAT_BatteryStatusFailAction(void)
 {
@@ -1163,29 +1159,7 @@ PMU_STATUS BAT_BatteryStatusFailAction(void)
 	BMT_status.POSTFULL_charging_time = 0;
 
 	/*  Disable charger */
-	//lenovo@lenovo.com 20160127 begin
-	#ifdef CONFIG_WIND_BATTERY_MODIFY
-	BMT_status.charger_vol=battery_meter_get_charger_voltage();
-	if((BMT_status.charger_vol < (V_CHARGER_MAX-300))&&(BMT_status.charger_protect_status == charger_OVER_VOL)&&(g_batt_temp_status ==TEMP_POS_NORMAL))
-	{	
-		BMT_status.bat_charging_state = CHR_CC;
-		charging_enable = KAL_TRUE;
-		BMT_status.charger_protect_status = 0;
-	}
-	else if((BMT_status.charger_vol > (V_CHARGER_MIN+300))&&(BMT_status.charger_protect_status == charger_UNDER_VOL)&&(g_batt_temp_status ==TEMP_POS_NORMAL))
-	{
-		BMT_status.bat_charging_state = CHR_CC;
-		charging_enable = KAL_TRUE;
-		BMT_status.charger_protect_status = 0;
-	}
-	else 
-	{
-		charging_enable = KAL_FALSE;
-	}
-	#else
 	charging_enable = KAL_FALSE;
-	#endif
-	//lenovo@lenovo.com 20161121 end
 	battery_charging_control(CHARGING_CMD_ENABLE, &charging_enable);
 
 	/* Disable PE+/PE+20 */

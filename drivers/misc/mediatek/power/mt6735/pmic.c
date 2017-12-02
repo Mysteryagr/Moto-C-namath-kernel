@@ -3236,6 +3236,14 @@ struct wakeup_source pmicThread_lock;
 #else
 struct wake_lock pmicThread_lock;
 #endif
+extern void msdc_sd_power_off(void);
+void ldo_oc_int_handler(void)
+{
+    PMICLOG("[ldo_oc_int_handler] OC status =0x%x. \n",upmu_get_reg_value(MT6328_OCSTATUS1));
+     if(1 == pmic_get_register_value(PMIC_OC_STATUS_VMCH))
+         msdc_sd_power_off();
+}
+
 
 void wake_up_pmic(void)
 {
@@ -3332,7 +3340,7 @@ void PMIC_EINT_SETTING(void)
 
 	pmic_register_interrupt_callback(6, bat_h_int_handler);
 	pmic_register_interrupt_callback(7, bat_l_int_handler);
-
+	pmic_register_interrupt_callback(25,ldo_oc_int_handler);
 	pmic_register_interrupt_callback(38, chrdet_int_handler);
 
 	pmic_register_interrupt_callback(42, fg_cur_h_int_handler);
@@ -3349,7 +3357,8 @@ void PMIC_EINT_SETTING(void)
 	pmic_enable_interrupt(6, 1, "PMIC");
 	pmic_enable_interrupt(7, 1, "PMIC");
 #endif
-
+  	pmic_enable_interrupt(25,1,"PMIC");
+  	pmic_set_register_value(PMIC_RG_VMCH_OCFB_EN,1);
 	/*pmic_enable_interrupt(30,1,"PMIC"); */
 
 	pmic_enable_interrupt(38, 1, "PMIC");
@@ -4058,11 +4067,6 @@ void PMIC_INIT_SETTING_V1(void)
 		ret = pmic_config_interface(0xEA6, 0x1, 0x3, 6);
 		ret = pmic_config_interface(0xEB8, 0x1, 0x1, 14);
 		ret = pmic_config_interface(0xF4A, 0xB, 0xF, 4);
-		//lenovo@lenovo.com 20161215 begin
-		#ifdef CONFIG_WIND_BATTERY_MODIFY
-		ret = pmic_config_interface(0xF48,0x0,0x1,0);
-		#endif
-		//lenovo@lenovo.com 20161215 end
 		ret = pmic_config_interface(0xF54, 0x0, 0x7, 1);
 		ret = pmic_config_interface(0xF62, 0x3, 0xF, 0);
 		ret = pmic_config_interface(0xF6C, 0x2, 0x1F, 0);
