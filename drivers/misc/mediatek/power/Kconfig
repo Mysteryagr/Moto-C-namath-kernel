@@ -15,6 +15,13 @@ config MTK_RT9466_SUPPORT
 	  Say n and choose other chargers.
 	  This driver uses I2C bus.
 
+# lenovo@lenovo.com 20161110 begin
+config MTK_FAN5405_SUPPORT
+	bool "MTK_FAN5405_SUPPORT"
+	select MTK_SWITCH_INPUT_OUTPUT_CURRENT_SUPPORT
+	default n
+# lenovo@lenovo.com 20161110 end
+
 config MTK_BQ25896_SUPPORT
 	bool "MTK_BQ25896_SUPPORT"
 	select MTK_SWITCH_INPUT_OUTPUT_CURRENT_SUPPORT
