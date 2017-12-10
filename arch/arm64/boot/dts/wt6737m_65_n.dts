@@ -2,18 +2,19 @@
 /dts-v1/;
 
 #include "mt6735m.dtsi"
-#include <dt-bindings/lcm/otm9608_qhd_dsi_cmd.dtsi>
+#include "wt6737m_65_n_battery.dtsi"
 
 / {
-	cpus {	#address-cells = <1>;
+	cpus {
+		#address-cells = <1>;
 		#size-cells = <0>;
+/*		enable-method = "mediatek,mt6735-smp"; */
 
 		cpu0: cpu@000 {
 			device_type = "cpu";
 			compatible = "arm,cortex-a53";
 			reg = <0x000>;
-			enable-method = "mt-boot";
-			cpu-idle-states = <&cluster_sleep_0 &cluster_sleep_0 &cpu_sleep_0_0 &cpu_sleep_0_0>;
+			enable-method = "spin-table";
 			cpu-release-addr = <0x0 0x40000200>;
 			clock-frequency = <1100000000>;
 		};
@@ -22,8 +23,7 @@
 			device_type = "cpu";
 			compatible = "arm,cortex-a53";
 			reg = <0x001>;
-			enable-method = "mt-boot";
-			cpu-idle-states = <&cluster_sleep_0 &cluster_sleep_0 &cpu_sleep_0_0 &cpu_sleep_0_0>;
+			enable-method = "spin-table";
 			cpu-release-addr = <0x0 0x40000200>;
 			clock-frequency = <1100000000>;
 		};
@@ -32,8 +32,7 @@
 			device_type = "cpu";
 			compatible = "arm,cortex-a53";
 			reg = <0x002>;
-			enable-method = "mt-boot";
-			cpu-idle-states = <&cluster_sleep_0 &cluster_sleep_0 &cpu_sleep_0_0 &cpu_sleep_0_0>;
+			enable-method = "spin-table";
 			cpu-release-addr = <0x0 0x40000200>;
 			clock-frequency = <1100000000>;
 		};
@@ -42,16 +41,15 @@
 			device_type = "cpu";
 			compatible = "arm,cortex-a53";
 			reg = <0x003>;
-			enable-method = "mt-boot";
-			cpu-idle-states = <&cluster_sleep_0 &cluster_sleep_0 &cpu_sleep_0_0 &cpu_sleep_0_0>;
+			enable-method = "spin-table";
 			cpu-release-addr = <0x0 0x40000200>;
 			clock-frequency = <1100000000>;
 		};
 	};
-	
+
 	memory@00000000 {
 		device_type = "memory";
-		reg = <0 0x40000000 0 0x1F000000>;
+		reg = <0 0x40000000 0 0x3F000000>;
 	};
 
 	bus {
@@ -74,6 +72,7 @@
 		};
 
 	};
+/*
 	led0:led@0 {
 		compatible = "mediatek,red";
 		led_mode = <0>;
@@ -110,7 +109,8 @@
 		data = <1>;
 		pwm_config = <0 0 0 0 0>;
 	};
-	led6:led@6 {
+*/
+	led6:led@0 {
 		compatible = "mediatek,lcd-backlight";
 		led_mode = <5>;
 		data = <1>;
@@ -123,25 +123,36 @@
 		vib_vol= <5>;
 	};
  /* sensor standardization */
-		cust_accel@0 {
-		compatible = "mediatek,mc3410";
+	cust_accel@0 {
+		compatible = "mediatek,kxtj2_1009";
 		i2c_num	= <2>;
-		i2c_addr = <0x4c 0 0 0>;
-		direction = <0>;
+		i2c_addr = <0x0e 0 0 0>;
+		direction = <4>;
 		power_id = <0xffff>;
 		power_vol = <0>;
-		firlen = <0>;
-		is_batch_supported = <0>;
+		firlen = <16>;
+		is_batch_supported = <1>;
 		};
 
-		cust_alsps@0 {
-		compatible = "mediatek,cm36652";
+	cust_accel@1 {
+		compatible = "mediatek,bma253";
 		i2c_num	= <2>;
-		i2c_addr = <0x60 0 0 0>;
-		polling_mode_ps = <0>;
-		polling_mode_als = <1>;
+		i2c_addr = <0x18 0 0 0>;
+		direction = <4>;
 		power_id = <0xffff>;
 		power_vol = <0>;
+		firlen = <16>;
+		is_batch_supported = <1>;
+		};
+/*
+		cust_alsps@0 {
+		compatible				= "mediatek,cm36652";
+		i2c_num				= <2>;
+		i2c_addr				= <0x60 0 0 0>;
+		polling_mode_ps			= <0>;
+		polling_mode_als		= <1>;
+		power_id				= <0xffff>;
+		power_vol				= <0>;
 		als_level = <0 328 861 1377 3125 7721 7767 12621 23062 28430 33274 47116 57694 57694 65535>;
 		als_value = <0 133 304 502 1004 2005 3058 5005 8008 10010 12000 16000 20000 20000 20000 20000>;
 		ps_threshold_high		=  <34>;
@@ -152,30 +163,32 @@
 
 		cust_mag@0 {
 		compatible				= "mediatek,akm09911";
-		i2c_num					= <2>;
+		i2c_num				= <2>;
 		i2c_addr				= <0x0D 0 0 0>;
 		direction				= <1>;
 		power_id				= <0xffff>;
 		power_vol				= <0>;
-		is_batch_supported			= <0>;
+		is_batch_supported	= <0>;
 		};
 
 		cust_gyro@0 {
 		compatible				= "mediatek,itg1010";
-		i2c_num					= <2>;
+		i2c_num				= <2>;
 		i2c_addr				= <0x68 0 0 0>;
 		direction				= <3>;
 		power_id				= <0xffff>;
 		power_vol				= <0>;
 		firlen					= <0>;
-		is_batch_supported			= <0>;
+		is_batch_supported	= <0>;
 		};
+*/
 };
 /* sensor gpio standization */
+/*
 &pio {
 	alsps_intpin_cfg: alspspincfg {
 
-	    pins_cmd_dat {
+		pins_cmd_dat {
 			pins = <PINMUX_GPIO65__FUNC_GPIO65>;
 			slew-rate = <0>;
 			bias-pull-up = <00>;
@@ -188,7 +201,7 @@
 
 	gyro_intpin_cfg: gyropincfg {
 
-	    pins_cmd_dat {
+		pins_cmd_dat {
 			pins = <PINMUX_GPIO67__FUNC_GPIO67>;
 			slew-rate = <0>;
 			bias-pull-down = <00>;
@@ -214,40 +227,54 @@
 	status = "okay";
 
 };
+*/
 /* sensor end */
 &accdet {
 		accdet-mic-vol = <7>;
-		headset-mode-setting = <0x500 0x200 1 0x1F0 0x800 0x800 0x20>;
-		accdet-plugout-debounce = <20>;
+		headset-mode-setting = <0x500 0x200 1 0x1 0x100 0x500 0x20>;
+		accdet-plugout-debounce = <1>;
 		/*1:ACC mode, 2:low cost without in bias, 6:low cost with in bias*/
-		accdet-mic-mode = <6>;
+		accdet-mic-mode = <1>;
 		/*0--MD_MAX--UP_MAX--DW_MAX*/
 		headset-three-key-threshold = <0 80 220 500>;
 		/*0--MD_MAX--VOICE_MAX--UP_MAX--DW_MAX*/
 		headset-four-key-threshold = <0 58 121 192 450>;
+        	pinctrl-names = "default", "state_eint_as_int";
+       	 	pinctrl-0 = <&accdet_pins_default>;
+        	pinctrl-1 = <&accdet_pins_eint_as_int>;
 };
 &touch {
-	tpd-resolution = <720 1280>;
-	use-tpd-button = <0>;
+	tpd-resolution = <480 854>;
+	use-tpd-button = <1>;
 	tpd-key-num = <3>;
-	tpd-key-local= <139 172 158 0>;
+	tpd-key-local= <158 172 139 0>;
 	tpd-key-dim-local = <90 883 100 40 230 883 100 40 370 883 100 40 0 0 0 0>;
-	tpd-max-touch-num = <5>;
+	tpd-max-touch-num = <2>;
 	tpd-filter-enable = <1>;
 	tpd-filter-pixel-density = <124>;
 	tpd-filter-custom-prameters = <0 0 0 0 0 0 0 0 0 0 0 0>;
 	tpd-filter-custom-speed = <0 0 0>;
 	pinctrl-names = "default", "state_eint_as_int", "state_eint_output0", "state_eint_output1",
-		"state_rst_output0", "state_rst_output1";
+		"state_rst_output0", "state_rst_output1","state_eint_suspend";
 	pinctrl-0 = <&CTP_pins_default>;
 	pinctrl-1 = <&CTP_pins_eint_as_int>;
 	pinctrl-2 = <&CTP_pins_eint_output0>;
 	pinctrl-3 = <&CTP_pins_eint_output1>;
 	pinctrl-4 = <&CTP_pins_rst_output0>;
 	pinctrl-5 = <&CTP_pins_rst_output1>;
+	pinctrl-6 = <&CTP_pins_eint_suspend>;
 	status = "okay";
 };
 &pio {
+	accdet_pins_default: accdeteintpindefault {
+	};
+	accdet_pins_eint_as_int: accdeteintpincfg {
+	pins_cmd_dat {
+	    pins = <PINMUX_GPIO6__FUNC_GPIO6>;
+	    slew-rate = <0>;
+	    bias-disable;
+	};
+	};
 	CTP_pins_default: eint0default {
 	};
 	CTP_pins_eint_as_int: eint@0 {
@@ -255,6 +282,13 @@
 			pins = <PINMUX_GPIO10__FUNC_GPIO10>;
 			slew-rate = <0>;
 			bias-disable;
+		};
+	};
+	CTP_pins_eint_suspend: eint@0 {
+		pins_cmd_dat {
+			pins = <PINMUX_GPIO10__FUNC_GPIO10>;
+			slew-rate = <0>;
+			bias-pull-down;
 		};
 	};
 	CTP_pins_eint_output0: eintoutput0 {
@@ -286,67 +320,83 @@
 		};
 	};
 };
+&i2c1 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	cap_touch2@38 {
+		compatible = "mediatek,cap_touch1";
+		reg = <0x38>;
+		status = "okay";
+		
+	};
+
+};
 /* TOUCH end */
+/*LCD */
+&dispsys {
+	lcm_power_rst_gpio = <&pio 146 0>;
+};
+/*LCD END*/
 /* CAMERA GPIO standardization */
 &pio {
 	camera_pins_cam0_rst0: cam0@0 {
-	    pins_cmd_dat {
+		pins_cmd_dat {
 			pins = <PINMUX_GPIO44__FUNC_GPIO44>;/*GPIO_CAMERA_CMRST_PIN*/
 			slew-rate = <1>; /*direction 0:in, 1:out*/
 			output-low;/*direction out used only. output_low or high*/
 		};
 	};
 	camera_pins_cam0_rst1: cam0@1 {
-	    pins_cmd_dat {
+		pins_cmd_dat {
 			pins = <PINMUX_GPIO44__FUNC_GPIO44>;/*GPIO_CAMERA_CMRST_PIN*/
 			slew-rate = <1>;
 			output-high;
 		};
 	};
 	camera_pins_cam0_pnd0: cam0@2 {
-	    pins_cmd_dat {
+		pins_cmd_dat {
 			pins = <PINMUX_GPIO7__FUNC_GPIO7>;/*GPIO_CAMERA_CMPDN_PIN*/
 			slew-rate = <1>;
 			output-low;
 		};
 	};
 	camera_pins_cam0_pnd1: cam0@3 {
-	    pins_cmd_dat {
+		pins_cmd_dat {
 			pins = <PINMUX_GPIO7__FUNC_GPIO7>;/*GPIO_CAMERA_CMPDN_PIN*/
 			slew-rate = <1>;
 			output-high;
 		};
 	};
 	camera_pins_cam1_rst0: cam1@0 {
-	    pins_cmd_dat {
+		pins_cmd_dat {
 			pins = <PINMUX_GPIO11__FUNC_GPIO11>;/*GPIO_CAMERA_CMRST1_PIN*/
 			slew-rate = <1>; /*direction 0:in, 1:out*/
 			output-low;/*direction out used only. output_low or high*/
 		};
 	};
 	camera_pins_cam1_rst1: cam1@1 {
-	    pins_cmd_dat {
+		pins_cmd_dat {
 			pins = <PINMUX_GPIO11__FUNC_GPIO11>;/*GPIO_CAMERA_CMRST1_PIN*/
 			slew-rate = <1>;
 			output-high;
 		};
 	};
 	camera_pins_cam1_pnd0: cam1@2 {
-	    pins_cmd_dat {
+		pins_cmd_dat {
 			pins = <PINMUX_GPIO12__FUNC_GPIO12>;/*GPIO_CAMERA_CMPDN1_PIN*/
 			slew-rate = <1>;
 			output-low;
 		};
 	};
 	camera_pins_cam1_pnd1: cam1@3 {
-	    pins_cmd_dat {
+		pins_cmd_dat {
 			pins = <PINMUX_GPIO12__FUNC_GPIO12>;/*GPIO_CAMERA_CMPDN1_PIN*/
 			slew-rate = <1>;
 			output-high;
 		};
 	};
 	camera_pins_cam_ldo0_0: cam@0 {
-	    pins_cmd_dat {
+		pins_cmd_dat {
 			pins = <PINMUX_GPIO68__FUNC_GPIO68>;/*GPIO_SPI_MOSI_PIN*/
 			slew-rate = <1>;
 			output-low;
@@ -391,7 +441,7 @@
 
 	gpslna_pins_init: gpslna@0 {
 
-	    pins_cmd_dat {
+		pins_cmd_dat {
 			pins = <PINMUX_GPIO79__FUNC_GPIO79>;
 			slew-rate = <0>;
 			bias-disable;
@@ -401,7 +451,7 @@
 
 	gpslna_pins_oh: gpslna@1 {
 
-	    pins_cmd_dat {
+		pins_cmd_dat {
 			pins = <PINMUX_GPIO79__FUNC_GPIO79>;
 			slew-rate = <1>;
 			output-high;
@@ -410,7 +460,7 @@
 
 	gpslna_pins_ol: gpslna@2 {
 
-	    pins_cmd_dat {
+		pins_cmd_dat {
 			pins = <PINMUX_GPIO79__FUNC_GPIO79>;
 			slew-rate = <1>;
 			output-low;
@@ -466,7 +516,7 @@
 		register_setting = <&mmc1_register_setting_default>;
 		host_function = /bits/ 8 <MSDC_SD>;
 		cd_level = /bits/ 8 <MSDC_CD_LOW>;
-		cd-gpios = <&pio 5 0>;
+		cd-gpios = <&pio 8 0>;
 		status = "okay";
 };
 
@@ -490,17 +540,17 @@
 	};
 
 	mmc0_register_setting_default: mmc0@register_default {
-		dat0rddly      = /bits/ 8 <0>;
-		dat1rddly      = /bits/ 8 <0>;
-		dat2rddly      = /bits/ 8 <0>;
-		dat3rddly      = /bits/ 8 <0>;
-		dat4rddly      = /bits/ 8 <0>;
-		dat5rddly      = /bits/ 8 <0>;
-		dat6rddly      = /bits/ 8 <0>;
-		dat7rddly      = /bits/ 8 <0>;
-		datwrddly      = /bits/ 8 <0>;
-		cmdrrddly      = /bits/ 8 <0>;
-		cmdrddly       = /bits/ 8 <0>;
+		dat0rddly	  = /bits/ 8 <0>;
+		dat1rddly	  = /bits/ 8 <0>;
+		dat2rddly	  = /bits/ 8 <0>;
+		dat3rddly	  = /bits/ 8 <0>;
+		dat4rddly	  = /bits/ 8 <0>;
+		dat5rddly	  = /bits/ 8 <0>;
+		dat6rddly	  = /bits/ 8 <0>;
+		dat7rddly	  = /bits/ 8 <0>;
+		datwrddly	  = /bits/ 8 <0>;
+		cmdrrddly	  = /bits/ 8 <0>;
+		cmdrddly	   = /bits/ 8 <0>;
 		cmd_edge = /bits/ 8 <MSDC_SMPL_FALLING>;
 		rdata_edge = /bits/ 8 <MSDC_SMPL_FALLING>;
 		wdata_edge = /bits/ 8 <MSDC_SMPL_FALLING>;
@@ -508,16 +558,16 @@
 		ett-hs200-cells = <12>;
 		ett-hs200-default = <OFFSET_MSDC_PATCH_BIT0	MSDC_PB0_INT_DAT_LATCH_CK_SEL 0x0
 			OFFSET_MSDC_PATCH_BIT0	MSDC_PB0_CKGEN_MSDC_DLY_SEL   0x0
-			OFFSET_MSDC_PATCH_BIT1	MSDC_PB1_CMD_RSP_TA_CNTR      0x1
-			OFFSET_MSDC_IOCON		MSDC_IOCON_RSPL               0x0
-			OFFSET_MSDC_PAD_TUNE0	MSDC_PAD_TUNE0_CMDRDLY        0x7
-			OFFSET_MSDC_PAD_TUNE0	MSDC_PAD_TUNE0_CMDRRDLY       0xb
+			OFFSET_MSDC_PATCH_BIT1	MSDC_PB1_CMD_RSP_TA_CNTR	  0x1
+			OFFSET_MSDC_IOCON		MSDC_IOCON_RSPL			   0x0
+			OFFSET_MSDC_PAD_TUNE0	MSDC_PAD_TUNE0_CMDRDLY		0x7
+			OFFSET_MSDC_PAD_TUNE0	MSDC_PAD_TUNE0_CMDRRDLY	   0xb
 			OFFSET_MSDC_PATCH_BIT1		MSDC_PB1_WRDAT_CRCS_TA_CNTR   0x1
-			OFFSET_MSDC_PAD_TUNE0	MSDC_PAD_TUNE0_DATWRDLY       0xb
-			OFFSET_MSDC_IOCON			MSDC_IOCON_W_D0SPL            0x0
-			OFFSET_MSDC_DAT_RDDLY0		MSDC_DAT_RDDLY0_D0            0x7
-			OFFSET_MSDC_PAD_TUNE0	MSDC_PAD_TUNE0_DATRRDLY       0x9
-			OFFSET_MSDC_IOCON		MSDC_IOCON_R_D_SMPL           0x0>;
+			OFFSET_MSDC_PAD_TUNE0	MSDC_PAD_TUNE0_DATWRDLY	   0xb
+			OFFSET_MSDC_IOCON			MSDC_IOCON_W_D0SPL			0x0
+			OFFSET_MSDC_DAT_RDDLY0		MSDC_DAT_RDDLY0_D0			0x7
+			OFFSET_MSDC_PAD_TUNE0	MSDC_PAD_TUNE0_DATRRDLY	   0x9
+			OFFSET_MSDC_IOCON		MSDC_IOCON_R_D_SMPL		   0x0>;
 
 		ett-hs400-cells = <8>;
 		ett-hs400-default = <OFFSET_MSDC_PATCH_BIT0	MSDC_PB0_INT_DAT_LATCH_CK_SEL	0x0
@@ -579,13 +629,13 @@
 	};
 
 	mmc1_register_setting_default: mmc1@register_default {
-				dat0rddly      = /bits/ 8 <0>;
-				dat1rddly      = /bits/ 8 <0>;
-				dat2rddly      = /bits/ 8 <0>;
-				dat3rddly      = /bits/ 8 <0>;
-				datwrddly      = /bits/ 8 <0>;
-				cmdrrddly      = /bits/ 8 <0>;
-				cmdrddly       = /bits/ 8 <0>;
+				dat0rddly	  = /bits/ 8 <0>;
+				dat1rddly	  = /bits/ 8 <0>;
+				dat2rddly	  = /bits/ 8 <0>;
+				dat3rddly	  = /bits/ 8 <0>;
+				datwrddly	  = /bits/ 8 <0>;
+				cmdrrddly	  = /bits/ 8 <0>;
+				cmdrddly	   = /bits/ 8 <0>;
 				cmd_edge = /bits/ 8 <MSDC_SMPL_FALLING>;
 				rdata_edge = /bits/ 8 <MSDC_SMPL_FALLING>;
 				wdata_edge = /bits/ 8 <MSDC_SMPL_FALLING>;
@@ -594,24 +644,19 @@
 /* mmc end */
 
 /* NFC GPIO standardization */
+/*
 &pio {
-	nfc_default: default {
+	nfc_default: mtknfc {
 
 	};
 
 	nfc_ven_high: state_ven_high {
 		pins_cmd_dat {
-			pins = <PINMUX_GPIO4__FUNC_GPIO4>;
-			slew-rate = <1>;
-			output-high;
 		};
 	};
 
 	nfc_ven_low: state_ven_low {
 		pins_cmd_dat {
-			pins = <PINMUX_GPIO4__FUNC_GPIO4>;
-			slew-rate = <1>;
-			output-low;
 		};
 	};
 
@@ -657,7 +702,7 @@
 };
 
 &nfc {
-	pinctrl-names = "default", "ven_high", "ven_low", "rst_high", "rst_low", "eint_high", "eint_low", "irq_init";
+	pinctrl-names = "mtknfc", "ven_high", "ven_low", "rst_high", "rst_low", "eint_high", "eint_low", "irq_init";
 	pinctrl-0 = <&nfc_default>;
 	pinctrl-1 = <&nfc_ven_high>;
 	pinctrl-2 = <&nfc_ven_low>;
@@ -668,6 +713,7 @@
 	pinctrl-7 = <&nfc_irq_init>;
 	status = "okay";
 };
+*/
 /* NFC end */
 
 /* USB GPIO Kernal Standardization start */
@@ -721,3 +767,16 @@
 	status = "okay";
 };
 /* USB GPIO Kernal Standardization end */
+
+&i2c2 {
+     gsensor@0e {
+		compatible = "mediatek,gsensor";
+		reg = <0x0e>;
+		status = "okay";
+	       };
+    gsensor@18 {
+		compatible = "mediatek,gsensor1";
+		reg = <0x18>;
+		status = "okay";
+	       };
+};
