@@ -11,6 +11,7 @@ mkdir -p out
 export USE_CCACHE=1
 
 export ARCH=arm64 ARCH_MTK_PLATFORM=mt6735
+export SUBARCH=arm64
 
 #Defconfig for Moto C
 make -C $PWD O=$PWD/out ARCH=arm64 wt6737m_65_n_defconfig
