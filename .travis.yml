@@ -17,7 +17,7 @@ script:
 deploy:
   provider: releases
   api_key: "$GIT_OAUTH_TOKEN_MOTO"
-  file: "$PWD/out/arch/arm/boot/zImage-dtb"
+  file: "$PWD/out/arch/arm64/boot/Image.gz-dtb"
   skip_cleanup: true
   on:
     tags: true
